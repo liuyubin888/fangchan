@@ -1,0 +1,269 @@
+﻿{include file="Public/head" }
+<body>
+	<nav class="breadcrumb">
+		<i class="Hui-iconfont">&#xe67f;</i>首页
+		<span class="c-gray en">&gt;</span>会员管理
+		<span class="c-gray en">&gt;</span>会员列表
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新">
+			刷新当前页面</a>
+	</nav>
+	<div class="page-container">
+		<div class="text-l">
+			<div style="margin-right:40px;float:left;">
+				<label for="">是否联系客户：</label> 
+				<span class="select-box inline">
+					<select name="contact_status" id="contact_status" class="select">
+						<option value="">请选择</option>
+						<option value="1">未联系</option>
+						<option value="2">已联系</option>
+					</select>
+				</span>
+			</div>
+			
+			<div style="margin-right:40px;float:left;">
+				<label for="">是否发放奖品：</label> 
+				<span class="select-box inline">
+					<select name="receive_status" id="receive_status" class="select">
+						<option value="">请选择</option>
+						<option value="1">未发放</option>
+						<option value="2">已发放</option>
+					</select>
+				</span>
+			</div>
+			<div style="margin-right:40px;float:left;">
+				<label for="">个人唯一分享标识：</label> 
+				<input type="text" class="input-text" style="width:200px;margin-right: 10px;" placeholder="不支持模糊匹配" id="share_identification"  name="share_identification">
+			</div>
+			<div style="margin-right:40px;float:left;">
+				<label for="">介绍人标识：</label> 
+				<input type="text" class="input-text" style="width:200px;margin-right: 10px;" placeholder="不支持模糊匹配" id="share_user_identification"  name="share_user_identification">
+			</div>
+			<div style="margin-right:15px;float:left;">
+				<label for="">登记手机号：</label> 
+				<input type="text" class="input-text" style="width:200px;margin-right: 10px;" placeholder="" id="mobile" name="mobile">
+			</div>
+			<button type="button" class="btn btn-success" id="btn_creation_select" name="btn_creation_select" style="width:70px;margin-left: 10px;">查询</button>
+		</div>
+		<div class="mt-20">
+
+			<div class="dataTables_wrapper">
+				<div class="dataTables_length">
+					<label>显示 
+						<select class="select" id="changPageSize">
+							<option value="10">10</option>
+							<option value="25">25</option>
+							<option value="50">50</option>
+							<option value="100">100</option>
+						</select> 
+					条</label>
+				</div>
+				<table class="table table-border table-bordered table-bg">
+					<thead>
+						<tr>
+							<th scope="col" colspan="10">会员列表</th></tr>
+						<tr class="text-c">
+							<th width="25">
+								<input type="checkbox" name="ace" value="" id="ace"></th>
+							<th width="40">ID</th>
+							<th width="150">手机号码</th>
+							<th width="150">姓名</th>
+							<th width="150">个人分享唯一标识</th>
+							<th width="100">介绍人标识</th>
+							<th width="100">是否联系</th>
+							<th width="100">奖品发放状态</th>
+							<th width="100">登记日期</th>
+							<th width="100">更改状态</th></tr>
+					</thead>
+					<tbody id="data_list_box">			
+					</tbody>
+				</table>
+				<div class="dataTables_paginate paging_simple_numbers pagination" id="page_content">
+				</div>
+			</div>
+			
+		</div>
+{include file="Public/footer" }
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLIC__/admin/lib/My97DatePicker/4.8/WdatePicker.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/admin/lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/admin/lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="__PUBLIC__/admin/js/partpage.js"></script>
+<script type="text/javascript">
+var PAGE_INFO = { 'PAGE': '1' };
+$(function(){
+	
+	$('#btn_creation_select').click(function(){  //查询数据
+		dataOperationObj.get_data_list(PAGE_INFO.PAGE);
+	});
+	dataOperationObj.get_data_list(PAGE_INFO.PAGE);
+	$('#changPageSize').change(function(){
+		var pageSize = $(this).val();
+		if(pageSize){
+			dataOperationObj.get_data_list(PAGE_INFO.PAGE,pageSize);
+		}
+	});
+	$('#ace').click(function(){
+		if($(this).is(":checked")){
+			$('#checkids').attr('checked');
+		}else{
+			$('#checkids').removeAttr('checked');
+		}
+	});
+	$('#delete_submit_btn').click(function(){
+		layer.confirm('确认要删除吗？',function(){
+			dataOperationObj.delete_date_submit();
+		})
+	});
+});
+
+//页面操作数据对象
+var dataOperationObj = {
+	get_data_list: function (CurrentPage,PageSize) {//获取分页数据
+
+		$('#btn_creation_select').html('loading...').addClass('disabled');
+		var page = CurrentPage || 1;
+		var PageSize = PageSize || 10;
+		var mobile = $('#mobile').val()?$('#mobile').val():'';
+		var share_identification = $('#share_identification').val()?$('#share_identification').val():'';
+		var share_user_identification = $('#share_user_identification').val()?$('#share_user_identification').val():'';
+		var contact_status = $('#contact_status').val()?$('#contact_status').val():'';
+		var receive_status = $('#receive_status').val()?$('#receive_status').val():'';
+		PAGE_INFO.PAGE = page;
+		var url = "<{:url('Customer/getCustomerList')}>";
+		url += '?CurrentPage=' + page + 
+				'&mobile='+mobile+
+				'&share_identification='+share_identification+
+				'&share_user_identification='+share_user_identification+
+				'&contact_status='+contact_status+
+				'&receive_status='+receive_status+
+				'&PageSize='+PageSize;
+
+		$.ajax({
+			type: 'get',
+			dataType: "json",
+			data: '',
+			url: url,
+			success: function (rsp) {
+				$("#btn_creation_select").html('查询').removeClass("disabled");
+				if (rsp.err_code == '0') {
+					if (rsp.dataList == null || rsp.dataList == false) {
+						$('#data_list_box').empty().append('<tr  class="text-c"><td colspan="10">数据为空</td></tr>'); 
+					}else{
+						dataOperationObj.show_data_list(rsp.dataList); //填充列表
+					}
+					
+					//创建分页按钮
+					var _pages = {
+						divId: 'page_content',
+						pageInfo: rsp.pageInfo,
+						reBack: function (cur) {
+							dataOperationObj.get_data_list(cur);
+						}
+					};
+					var qstPage = new PartPage(_pages);
+					qstPage.init();
+
+				}
+			},
+			error: function (XmlHttpRequest, textStatus, errorThrown) {
+				layer.msg('操作失败');
+				$("#btn_creation_select").html('查询').removeClass("disabled");
+			}
+		});
+	},
+	show_data_list: function (data) { //填充列表
+		var html = '';
+		for (var i in data) {
+			var item = data[i];
+			for (var j in item) {
+				if (item[j] == null) { item[j] = ''; }
+			}
+			var id = item['id']?item['id']:'';
+			var mobile = item['mobile']?item['mobile']:'';
+			var share_identification = item['share_identification']?item['share_identification']:'';
+			var name = item['name']?item['name']:'';
+			var created = item['created']?item['created']:'';
+			var contact_status = item['contact_status']?item['contact_status']:'';
+			var receive_status = item['receive_status']?item['receive_status']:'';
+			var share_user_identification = item['share_user_identification']?item['share_user_identification']:'';
+			var contact_status_text = contact_status=='2'?'<span class="label label-success radius">已联系</span>':'<span class="label radius">未联系</span>';
+			var receive_status_text = receive_status=='2'?'<span class="label label-success radius">已发放</span>':'<span class="label radius">未发放</span>';
+			
+			if(contact_status == '1'){
+				var contact_btn = '<a href="javascript:;" class="btn btn-primary " onclick="dataOperationObj.contact(this);" data-id="'+ id +'">已联系</a>';
+			}else{
+				var contact_btn = '';
+			}
+			if(receive_status == '1'){
+				var receive_btn = '<a href="javascript:;" class="btn btn-primary " onclick="dataOperationObj.receive(this);" data-id="'+ id +'">已发放</a>'; 
+			}else{
+				var receive_btn = '';
+			}
+			html += '<tr class="text-c"><td><input class="checkids" type="checkbox" value="'+ id +'" name=""></td>';
+			html += '<td>'+ id +'</td>';
+			html += '<td>'+ mobile +'</td>';
+			html += '<td>'+ name +'</td>';
+			html += '<td>'+ share_identification +'</td>';
+			html += '<td>'+ share_user_identification +'</td>';
+			html += '<td>'+ contact_status_text +'</td>';
+			html += '<td>'+ receive_status_text +'</td>';
+			html += '<td>'+ created +'</td>';
+			html += '<td>'+ contact_btn +'&nbsp;&nbsp;'+ receive_btn +'</td>';
+		}
+		$('#data_list_box').empty().append(html);
+	},
+	contact: function(obj){
+		var id = $(obj).attr('data-id');
+		if(id){
+			layer.confirm('是否确认操作？',function(index){
+				$.ajax({
+					type: 'get',
+					dataType: "json",
+					data: {customer_id:id},
+					url: "<{:url('Customer/editcontact')}>",
+					success: function (rsp) {
+						if(rsp.err_code == '0'){
+							layer.msg('操作成功!',{icon:1,time:1000});
+							dataOperationObj.get_data_list(PAGE_INFO.PAGE);
+						}
+						
+					},
+					error: function (XmlHttpRequest, textStatus, errorThrown) {
+						
+					}
+				});	
+			});
+		}else{
+			layer.msg('参数有误')
+		}
+	},
+	receive: function(obj){
+		var id = $(obj).attr('data-id');
+		if(id){
+			layer.confirm('是否确认操作？',function(index){
+				$.ajax({
+					type: 'get',
+					dataType: "json",
+					data: {customer_id:id},
+					url: "<{:url('Customer/editreceive')}>",
+					success: function (rsp) {
+						if(rsp.err_code == '0'){
+							layer.msg('操作成功!',{icon:1,time:1000});
+							dataOperationObj.get_data_list(PAGE_INFO.PAGE);
+						}
+						
+					},
+					error: function (XmlHttpRequest, textStatus, errorThrown) {
+						
+					}
+				});
+			});
+		}else{
+			layer.msg('参数有误')
+		}
+	},
+}
+</script>
+</body>
+</html>
