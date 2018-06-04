@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta itemprop="name" content="推荐购房拿大奖，登记买房折扣多"/>
+    <meta itemprop="image" content="yfh.miits.cn" />
+    <meta name="description" itemprop="description" content="粤房汇网，周年庆典，购房折扣最高达7折" />
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="robots" content="all">
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="Description" content="">
+    <link rel="stylesheet" href="__PUBLIC__/index/css/layui.css">
+    <link id="layuicss-skinlayercss" rel="stylesheet" href="__PUBLIC__/index/css/layer.css" media="all">
+    <script src="__PUBLIC__/index/js/layer.js"></script>
+    <script src="__PUBLIC__/index/js/zepto.min.js"></script>
+    <title>周年庆典-房汇网</title>
+    <script>
+        (function (win,doc){
+            if (!win.addEventListener) return;
+            var html=document.documentElement;
+            function setFont()
+            {
+                var cliWidth=html.clientWidth;
+                html.style.fontSize=100*(cliWidth/640)+'px';
+            }
+            win.addEventListener('resize',setFont,false);
+            setFont();
+        })(window,document);
+    </script>
+    <style>
+        body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+          margin: 0;
+          padding: 0; }
+
+        article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+          display: block; }
+
+        table {
+          border-collapse: collapse;
+          border-spacing: 0; }
+
+        audio, canvas, video {
+          display: inline-block; }
+
+        fieldset, img {
+          border: 0; }
+
+        address, caption, cite, code, dfn, em, strong, th, var {
+          font-style: normal;
+          font-weight: normal; }
+
+        ol, ul {
+          list-style: none; }
+
+        caption, th {
+          text-align: left; }
+
+        h1, h2, h3, h4, h5, h6 {
+          font-size: 100%;
+          font-weight: normal; }
+        input:focus{
+            outline:none;
+        }
+        *:focus { outline: none; } 
+        .wrap{
+            width: 6.4rem;
+            height: 19.36rem;
+            background-size: 100% 100%;
+            background-repeat: repeat;
+            background-image: url(__PUBLIC__/index/images/5a73ff5605f88.png);
+        }
+        .content-1{
+            width: 6.4rem;
+            height:10rem;
+            position: relative;
+        }
+        .content-2{
+            width: 6.4rem;
+            height: 9.4rem;
+            position: relative;
+        }
+        .content-1 .vue-edit-area-1{
+            line-height: 1.15;
+            color: #fff;
+            width: 3.9rem;
+            height: 3.5rem;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: .3rem;
+            position: absolute;
+            top: 2.5rem;
+            left: 1.5em;
+            font-size: 1.1rem;
+        }
+        .content-1 .vue-edit-area-2{
+            position: absolute;
+            width:100%;
+            color: #fff;
+            line-height: 1.55;
+            font-weight: normal;
+            text-align: center;
+            font-size: .3rem;
+            bottom:1.6rem;
+            -webkit-writing-mode: horizontal-tb;
+            letter-spacing: 0px;
+        }
+        .content-1 .vue-edit-area-3{
+            position: absolute;
+            width: 100%;
+            color: #fff;
+            line-height: 1.55;
+            font-weight: normal;
+            text-align: center;
+            font-size: .37rem;
+            bottom: .3rem;
+            -webkit-writing-mode: horizontal-tb;
+            letter-spacing: 0px;
+        }
+        .content-1 .img-render-1{
+            line-height: 1.15;
+            color: #fff;
+            width: 2.5rem;
+            height: 2.7rem;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: .3rem;
+            position: absolute;
+            top: .5rem;
+        }
+        .content-1 .img-render-2{
+            line-height: 1.15;
+            color: #fff;
+            width: 2.1rem;
+            height: 2.1rem;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: .3rem;
+            position: absolute;
+            top: .5rem;
+            right: .3rem;
+        }
+        .content-2 .vue-edit-area-1{
+            position: absolute;
+            top: 2.7rem;
+            left: .6rem;
+            line-height: 1.8;
+            color: rgb(255, 255, 255);
+            width: 2.3rem;
+            height: .6rem;
+            font-size: .3rem;
+            font-weight: bold;
+            text-align: center;
+            background-color: rgb(92, 45, 142);
+            z-index: 14;
+        }
+        .content-2 .vue-edit-area-2{
+            position: absolute;
+            top: 3rem;
+            left: .27rem;
+            color: rgb(255, 255, 255);
+            width: 5.9rem;
+            height: 4rem;
+            border: 2px #fff solid;
+            z-index: 12;
+        }
+        .content-2 .vue-edit-area-3{
+            position: absolute;
+            top: 4rem;
+            right: .3rem;
+            color: rgb(255, 255, 255);
+            width: 5.5rem;
+            height: 2rem;
+            font-size: .3rem;
+        }
+        .content-2 .vue-edit-area-3 p{
+            line-height: .6rem;
+        }
+        .content-2 .vue-edit-area-3 p span{
+            font-size: .35rem;
+            color: #ffde32;
+        }
+        .content-2 .vue-edit-area-4{
+            position: absolute;
+            bottom: 1rem;
+            right: 2rem;
+            line-height: .8rem;
+            color: rgb(255, 255, 255);
+            width: 2.4rem;
+            height: .8rem;
+            font-size: .3rem;
+            font-weight: bold;
+            text-align: center;
+            background-color: rgb(92, 45, 142);
+        }
+    </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="content-1">
+                <img src="__PUBLIC__/index/images/5a6853a4789b3.jpg" width="100%" height="100%">
+                <div class="vue-edit-area-1">
+                    周年<br>庆典
+                </div>
+                <div class="img-render-1">
+                    <img src="__PUBLIC__/index/images/5a73ff581adec.gif" width="100%" height="100%">
+                </div>
+                <div class="img-render-2">
+                    <img src="__PUBLIC__/index/images/5a6853a52d913.jpg" width="100%" height="100%">
+                </div>
+                <div class="vue-edit-area-2">
+                    感  恩  有  你  |  一  路  同  行<br>
+                    G A N E N Y O U N I Y I L U T O N G X I N G
+                </div>
+                <div class="vue-edit-area-3">—2018粤房汇感恩大会盛大开启—</div>
+            </div>
+            <div class="content-2">
+                <div class="img-render-1">
+                    <img src="__PUBLIC__/index/images/5a73ff582e83d.png" width="100%" height="100%">
+                </div>
+                <div class="vue-edit-area-1">庆典活动介绍</div>
+                <div class="vue-edit-area-2"></div>
+                <div class="vue-edit-area-3">
+                    <p>
+                        1、邀请好友申请登记资料，申请购房资格
+                        <span>&nbsp;&nbsp;200元京东卡&nbsp;&nbsp;</span>
+                        马上到手！
+                    </p>
+                    <p>
+                        2、本周最先推荐10名客户申请的第一位，奖励
+                        <span>&nbsp;&nbsp;iphone X&nbsp;&nbsp;</span>
+                        一台。
+                    </p>
+                </div>
+                <div class="vue-edit-area-4" id="active_btn">点击参与活动</div>
+            </div>
+        </div>
+    </body>
+    <script>
+        
+        var approvalObj = {
+            is_send_code:true,
+            send_code : function (){
+                var _this = this;
+                if(!_this.is_send_code){return}
+                var mobile = $('#mobile').val();
+                var preg = /^1[34578]\d{9}$/;
+                $('#tips-text').html('').css('opacity','0');
+                if(!preg.test(mobile)){
+                    $('#tips-text').html('请填写正确的手机号码').css('opacity','1');
+                    return false;
+                }
+                _this.activationSendBtn();
+                $('#approval_mobile_btn').css('background-color','#d67d50');
+                var url = "<{:url('index/getSmsCode')}>"+'?mobile='+mobile;
+                $.ajax({
+                    type:'post',
+                    url:url,
+                    dataType:'json',
+                    data:{},
+                    success:function(){
+
+                    },
+                    error:function(){
+
+                    }
+                })
+            },
+            activationSendBtn : function(){
+                var _this = this;
+                var time=60;
+                var mytimer=setInterval(function(){
+                    if (time<=0) {
+                        time=0;
+                        clearInterval(mytimer);
+                        $("#getCodeBtn").html('发送验证码');
+                        _this.is_send_code = true;
+                    }else{
+                        _this.is_send_code = false;
+                        time--;
+                        $("#getCodeBtn").html(time+'秒');
+                    }
+                },1000);
+            },
+        };
+        $(function(){
+            
+
+            $('#active_btn').click(function(){
+                var html = '<div style="position: relative;">\
+                                <a href="javascript:;" onclick="layer.closeAll();" style="position: absolute;top: .4rem;right: .5rem;font-size:.5rem;color:#ccc;width: .2rem;height: .2rem;line-height: .2rem;">\
+                                    X\
+                                </a>\
+                                <div style="border-bottom:1px #e8e8e8 solid;padding-top: .25rem;padding-bottom: .45rem;">\
+                                    <p style="text-align: center;color:#337fb7;font-size: .36rem;padding-bottom:.1rem;">\
+                                        登记手机号\
+                                    </p>\
+                                    <p style="text-align: center;color:#337fb7;font-size: .25rem;">\
+                                        以便我们联系您发放奖品\
+                                    </p>\
+                                </div>\
+                                <div style="margin-top: .16rem;">\
+                                    <div style=" border-bottom:1px #e8e8e8 solid;">\
+                                        <input type="text" placeholder="请输入您的常用手机号" style="color:#636363;border:none;border-bottom:1px #e8e8e8 solid;width: 4.5rem;margin-left: .47rem;line-height: .85rem;outline:none;"\
+                                        id="mobile">\
+                                        <input type="text" placeholder="请输入验证码" style="color:#636363;border:none;width: 3rem;margin-left: .47rem;line-height: .85rem;outline:none;float:left;"\
+                                        id="code">\
+                                        <div style="width:.3rem;float:left;line-height: .85rem;color:#337fb7;">\
+                                            |\
+                                        </div>\
+                                        <div onclick="approvalObj.send_code();" id="getCodeBtn" style="width:1rem;float:left;line-height: .85rem;color: #6f94af;margin-left: .2rem;width: 1.7rem;">\
+                                            发送验证码\
+                                        </div>\
+                                        <div style="clear:both">\
+                                        </div>\
+                                    </div>\
+                                    <p id="tips-text" style="color:red;text-align: center;padding:.2rem 0;opacity:0;">\
+                                        请输入正确的手机号！\
+                                    </p>\
+                                    <div id="approval_mobile_btn" style="background-color: #d1d1d1;color: #fff;width:100%;text-align: center;line-height: .85rem;font-size: .34rem;">\
+                                        确定\
+                                    </div>\
+                                </div>\
+                            </div>';
+                layer.open({
+                  content: html,
+                  shadeClose: false,
+                  yes: function(){
+                    layer.open({
+                      content: '好的'
+                      ,time: 2
+                      ,skin: 'msg'
+                    });
+                  }
+                });
+            })
+        });
+
+    </script>
+</html>
+
+
+

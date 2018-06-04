@@ -1,0 +1,212 @@
+﻿{include file="Public/head" }
+<body>
+	<nav class="breadcrumb">
+		<i class="Hui-iconfont">&#xe67f;</i>首页
+		<span class="c-gray en">&gt;</span>管理员管理
+		<span class="c-gray en">&gt;</span>管理员列表
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新">
+			刷新当前页面</a>
+	</nav>
+	<div class="page-container">
+		<div class="text-c">
+			<input type="text" class="input-text" style="width:250px;margin-right: 10px;" placeholder="输入管理员名称" id="username" name="username">
+			<button type="button" class="btn btn-success" id="btn_creation_select" name="btn_creation_select" style="width:70px;margin-left: 10px;">查询</button>
+		</div>
+		<div class="cl pd-5 bg-1 bk-gray mt-20">
+			<span class="l">
+				<a href="javascript:;" id="delete_submit_btn" class="btn btn-danger radius">
+					<i class="Hui-iconfont">&#xe6e2;</i>删除</a>
+				<a href="javascript:;" class="btn btn-primary radius" id="open_add_btn">
+					<i class="Hui-iconfont">&#xe600;</i>添加管理员</a></span>
+		</div>
+		<div class="mt-20">
+
+			<div class="dataTables_wrapper">
+				<div class="dataTables_length">
+					<label>显示 
+						<select class="select" id="changPageSize">
+							<option value="10">10</option>
+							<option value="25">25</option>
+							<option value="50">50</option>
+							<option value="100">100</option>
+						</select> 
+					条</label>
+				</div>
+				<table class="table table-border table-bordered table-bg">
+					<thead>
+						<tr>
+							<th scope="col" colspan="9">管理员列表</th></tr>
+						<tr class="text-c">
+							<th width="25">
+								<input type="checkbox" name="ace" value="" id="ace"></th>
+							<th width="40">ID</th>
+							<th width="150">登录名</th>
+							<th width="150">创建时间</th>
+							<th width="150">最后登录时间</th>
+							<th width="100">操作</th></tr>
+					</thead>
+					<tbody id="data_list_box">			
+					</tbody>
+				</table>
+				<div class="dataTables_paginate paging_simple_numbers pagination" id="page_content">
+				</div>
+			</div>
+			
+		</div>
+{include file="Public/footer" }
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__PUBLIC__/admin/lib/My97DatePicker/4.8/WdatePicker.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/admin/lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/admin/lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="__PUBLIC__/admin/js/partpage.js"></script>
+<script type="text/javascript">
+var PAGE_INFO = { 'PAGE': '1' };
+$(function(){
+	$('#open_add_btn').click(function(){  //添加管理员
+		/*
+			参数解释：
+			title	标题
+			url		请求的url
+			id		需要操作的数据id
+			w		弹出层宽度（缺省调默认值）
+			h		弹出层高度（缺省调默认值）
+			title,url,w,h
+		*/
+		layer_show('添加管理员',"<{:url('Admin/adminAdd')}>",'800','500');
+	});
+	$('#btn_creation_select').click(function(){  //查询数据
+		dataOperationObj.get_data_list(PAGE_INFO.PAGE);
+	});
+	dataOperationObj.get_data_list(PAGE_INFO.PAGE);
+	$('#changPageSize').change(function(){
+		var pageSize = $(this).val();
+		if(pageSize){
+			dataOperationObj.get_data_list(PAGE_INFO.PAGE,pageSize);
+		}
+	});
+	$('#ace').click(function(){
+		if($(this).is(":checked")){
+			$('#checkids').attr('checked');
+		}else{
+			$('#checkids').removeAttr('checked');
+		}
+	});
+	$('#delete_submit_btn').click(function(){
+		layer.confirm('确认要删除吗？',function(){
+			dataOperationObj.delete_date_submit();
+		})
+	});
+});
+
+//页面操作数据对象
+var dataOperationObj = {
+	get_data_list: function (CurrentPage,PageSize) {//获取分页数据
+
+		$('#btn_creation_select').html('loading...').addClass('disabled');
+		var page = CurrentPage || 1;
+		var PageSize = PageSize || 10;
+		var username = $('#username').val()?$('#username').val():'';
+		PAGE_INFO.PAGE = page;
+		var url = "<{:url('admin/getAdminList')}>";
+		url += '?CurrentPage=' + page + 
+				'&username='+username+
+				'&PageSize='+PageSize;
+
+		$.ajax({
+			type: 'get',
+			dataType: "json",
+			data: '',
+			url: url,
+			success: function (rsp) {
+				$("#btn_creation_select").html('查询').removeClass("disabled");
+				if (rsp.err_code == '0') {
+					if (rsp.dataList == null || rsp.dataList == false) {
+						
+					}
+					dataOperationObj.show_data_list(rsp.dataList); //填充列表
+					//创建分页按钮
+					var _pages = {
+						divId: 'page_content',
+						pageInfo: rsp.pageInfo,
+						reBack: function (cur) {
+							dataOperationObj.get_data_list(cur);
+						}
+					};
+					var qstPage = new PartPage(_pages);
+					qstPage.init();
+
+				}
+			},
+			error: function (XmlHttpRequest, textStatus, errorThrown) {
+				
+			}
+		});
+	},
+	show_data_list: function (data) { //填充列表
+		var html = '';
+		for (var i in data) {
+			var item = data[i];
+			for (var j in item) {
+				if (item[j] == null) { item[j] = ''; }
+			}
+			var id = item['id']?item['id']:'';
+			var username = item['username']?item['username']:'';
+			var created = item['created']?item['created']:'';
+			var lastvisit = item['lastvisit']?item['lastvisit']:'';
+			
+			html += '<tr class="text-c"><td><input class="checkids" type="checkbox" value="'+ id +'" name=""></td>';
+			html += '<td>'+ id +'</td>';
+			html += '<td>'+ username +'</td>';
+			html += '<td>'+ created +'</td>';
+			html += '<td>'+ lastvisit +'</td>';
+			html += '<td><a title="编辑" href="javascript:;" onclick="dataOperationObj.open_edit_admin('+ id +')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a></td></tr>';
+		}
+		$('#data_list_box').empty().append(html);
+	},
+	open_edit_admin: function(id){
+		if(!id){
+			layer.msg('参数有误',{icon:2,time:1000});
+		}
+		var edit_url = "<{:url('admin/adminedit')}>"+'?id='+id;
+		layer_show('编辑管理员',edit_url,'800','500');
+		
+		
+	},
+	delete_date_submit: function(id){
+		var ids = this.get_checked_val();
+		if(ids){
+			$.ajax({
+				type: 'get',
+				dataType: "json",
+				data: {id:ids},
+				url: "<{:url('admin/deleteAdmin')}>",
+				success: function (rsp) {
+					if(rsp.err_code == '0'){
+						layer.msg('操作成功!',{icon:1,time:1000});
+						dataOperationObj.get_data_list(PAGE_INFO.PAGE);
+					}
+					
+				},
+				error: function (XmlHttpRequest, textStatus, errorThrown) {
+					
+				}
+			});
+		}
+	},
+	get_checked_val: function () { //获取选中的ID
+		var ids = [];
+		$('.checkids').each(function () {
+			var is_checked = $(this).is(':checked');
+			var id = $(this).val();
+
+			if (is_checked) {
+				ids.push(id);
+			}
+		});
+		return ids;
+	}
+}
+</script>
+</body>
+</html>
