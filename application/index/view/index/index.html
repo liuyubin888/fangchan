@@ -250,16 +250,16 @@
                     $('#tips-text').html('请填写正确的手机号码').css('opacity','1');
                     return false;
                 }
-                _this.activationSendBtn();
+                
                 $('#approval_mobile_btn').css('background-color','#d67d50');
-                var url = "<{:url('index/getSmsCode')}>"+'?mobile='+mobile;
+                var url = "<{:url('Sendmsg/sendSms')}>"+'?mobile='+mobile;
                 $.ajax({
                     type:'post',
                     url:url,
                     dataType:'json',
                     data:{},
                     success:function(){
-
+                        _this.activationSendBtn();
                     },
                     error:function(){
 

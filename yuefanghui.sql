@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50540
 File Encoding         : 65001
 
-Date: 2018-06-03 04:27:10
+Date: 2018-06-05 00:14:26
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -34,7 +34,7 @@ CREATE TABLE `admin` (
 -- ----------------------------
 -- Records of admin
 -- ----------------------------
-INSERT INTO `admin` VALUES ('1', '18126788811', 'ef9169144e811171dd9ef2a0c2279023', 'C3v7gj', '0', '1', '0000-00-00 00:00:00', '2018-06-02 21:41:28');
+INSERT INTO `admin` VALUES ('1', '18126788811', 'ef9169144e811171dd9ef2a0c2279023', 'C3v7gj', '0', '1', '0000-00-00 00:00:00', '2018-06-04 21:23:34');
 INSERT INTO `admin` VALUES ('2', '17688445073', 'abbdac1047f138857d4675bac9681d64', 'N0Q0tA', '1', '1', '0000-00-00 00:00:00', '2018-06-02 21:41:20');
 INSERT INTO `admin` VALUES ('23', 'wenwen', 'eb397026c83ef6dda58340a82e8924d6', 'dR119v', '1', '1', '2018-06-02 21:41:42', '2018-06-02 21:41:42');
 INSERT INTO `admin` VALUES ('24', 'binbin', '9f4c4ab0dc0d036d610e580cbfd458a0', 'u3tU3t', '1', '1', '2018-06-02 21:43:38', '2018-06-02 21:43:38');
@@ -53,9 +53,13 @@ CREATE TABLE `customer` (
   `receive_status` int(11) NOT NULL DEFAULT '1' COMMENT '发放奖品状态：1--未发放，2--已发放',
   `share_user_identification` varchar(255) DEFAULT NULL COMMENT '分享人标识',
   `wx_info_id` int(11) DEFAULT NULL COMMENT '微信用户信息记录ID',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='用户表';
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_mobile` (`mobile`),
+  UNIQUE KEY `unique_share_bs` (`share_identification`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- ----------------------------
 -- Records of customer
 -- ----------------------------
+INSERT INTO `customer` VALUES ('1', '18126788811', 'dsfdsf231sd231', 'fdds', '2018-01-08 16:06:15', '2', '2', 'sdf48654', null);
+INSERT INTO `customer` VALUES ('2', '17688445071', 'sdadasdsadas', '5071', '2018-01-24 16:06:15', '1', '1', 'dsfdsf231sd231', null);
