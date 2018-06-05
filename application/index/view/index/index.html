@@ -239,34 +239,74 @@
     <script>
         
         var approvalObj = {
-            is_send_code:true,
-            send_code : function (){
+            is_send_code:true, //是否可以发送验证码
+            is_submit_data:false, //是否可以提交资料flag
+            send_code : function (){ //发送获取验证码
                 var _this = this;
                 if(!_this.is_send_code){return}
                 var mobile = $('#mobile').val();
                 var preg = /^1[34578]\d{9}$/;
-                $('#tips-text').html('').css('opacity','0');
+                $('#tips-text').css('opacity','0');
                 if(!preg.test(mobile)){
                     $('#tips-text').html('请填写正确的手机号码').css('opacity','1');
                     return false;
                 }
                 
-                $('#approval_mobile_btn').css('background-color','#d67d50');
-                var url = "<{:url('Sendmsg/sendSms')}>"+'?mobile='+mobile;
+                var url = "<{:url('Index/Sendmsg/sendSms')}>";
                 $.ajax({
                     type:'post',
                     url:url,
                     dataType:'json',
-                    data:{},
-                    success:function(){
-                        _this.activationSendBtn();
+                    data:{'mobile':mobile},
+                    success:function(rsp){
+                        if(rsp.err_code == '0'){
+                            _this.is_submit_data = true;
+                            $('#approval_mobile_btn').css('background-color','#d67d50');
+                            _this.activationSendBtn(); //倒数
+                        }else{
+                            
+                        }
+                        
                     },
                     error:function(){
 
                     }
-                })
+                });
             },
-            activationSendBtn : function(){
+            sublime_data:function(){  //确定提交资料
+                var _this = this;
+                if(!_this.is_submit_data){return}
+                var mobile = $('#mobile').val()?$('#mobile').val():'';
+                var code = $('#code').val()?$('#code').val():'';
+                var url = "<{:url('index/Index/gradeMobile')}>";
+                var preg = /^1[34578]\d{9}$/;
+                $('#tips-text').css('opacity','0');
+                if(!preg.test(mobile)){
+                    $('#tips-text').html('请填写正确的手机号码').css('opacity','1');
+                    return false;
+                }
+                if(code.length != 6 || !code || !Number(code)){
+                    $('#tips-text').html('验证码格式错误').css('opacity','1');
+                    return false;
+                }
+                $.ajax({
+                    type:'post',
+                    url:url,
+                    dataType:'json',
+                    data:{'mobile':mobile,'code':code,'name':'test'},
+                    success:function(rsp){
+                        if(rsp.err_code == '0'){
+
+                        }else{
+                            $('#tips-text').html(rsp.err_msg).css('opacity','1');
+                        }
+                    },
+                    error:function(){
+
+                    }
+                });
+            },
+            activationSendBtn : function(){  //验证码倒计时
                 var _this = this;
                 var time=60;
                 var mytimer=setInterval(function(){
@@ -283,9 +323,12 @@
                 },1000);
             },
         };
+
         $(function(){
             
-
+            $('#approval_mobile_btn').click(function(){
+                
+            });
             $('#active_btn').click(function(){
                 var html = '<div style="position: relative;">\
                                 <a href="javascript:;" onclick="layer.closeAll();" style="position: absolute;top: .4rem;right: .5rem;font-size:.5rem;color:#ccc;width: .2rem;height: .2rem;line-height: .2rem;">\
@@ -317,7 +360,7 @@
                                     <p id="tips-text" style="color:red;text-align: center;padding:.2rem 0;opacity:0;">\
                                         请输入正确的手机号！\
                                     </p>\
-                                    <div id="approval_mobile_btn" style="background-color: #d1d1d1;color: #fff;width:100%;text-align: center;line-height: .85rem;font-size: .34rem;">\
+                                    <div id="approval_mobile_btn" onclick="approvalObj.sublime_data();" style="background-color: #d1d1d1;color: #fff;width:100%;text-align: center;line-height: .85rem;font-size: .34rem;">\
                                         确定\
                                     </div>\
                                 </div>\
