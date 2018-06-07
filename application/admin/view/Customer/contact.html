@@ -1,23 +1,21 @@
 {include file="Public/head" }
+<script>
+	var maxDate = <{$maxDate}>;
+</script>
 <body>
 <article class="page-container">
 	<form class="form form-horizontal" id="form-admin-add">
 	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>管理员：</label>
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>联系时间：</label>
 		<div class="formControls col-xs-8 col-sm-9">
-			<input type="text" class="input-text" value="" placeholder="" id="username" name="username">
+			<input type="text" onfocus="WdatePicker({ dateFmt:'yyyy-MM-dd HH:mm:ss',maxDate:maxDate})" id="contact_date" class="input-text Wdate" value="<{$contact['contact_date']}>">
+			<input type="hidden" value="<{$id}>" id="customer_id">
 		</div>
 	</div>
 	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>初始密码：</label>
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>联系结果：</label>
 		<div class="formControls col-xs-8 col-sm-9">
-			<input type="password" class="input-text" autocomplete="off" value="" placeholder="密码" id="password" name="password">
-		</div>
-	</div>
-	<div class="row cl">
-		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
-		<div class="formControls col-xs-8 col-sm-9">
-			<input type="password" class="input-text" autocomplete="off"  placeholder="确认新密码" id="password2" name="password2">
+			<textarea class="textarea" name="contact_name" id="contact_name"><{$contact['contact_name']}></textarea>
 		</div>
 	</div>
 	<div class="row cl">
@@ -32,6 +30,7 @@
 <script type="text/javascript" src="__PUBLIC__/admin/lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
 <script type="text/javascript" src="__PUBLIC__/admin/lib/jquery.validation/1.14.0/validate-methods.js"></script> 
 <script type="text/javascript" src="__PUBLIC__/admin/lib/jquery.validation/1.14.0/messages_zh.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/admin/lib/My97DatePicker/4.8/WdatePicker.js"></script>
 <script type="text/javascript">
 $(function(){
 	$('#add_submit_btn').click(function(){
@@ -42,34 +41,27 @@ $(function(){
 //页面操作数据对象
 var dataOperationObj = {
 	submitData : function(){ //添加数据
-		var username = $('#username').val();
-		var password = $('#password').val();
-		var password2 = $('#password2').val();
-		if(username == ''){
-			layer.msg('添加用户名不能为空',{icon:2,time:1000});
+		var customer_id = $('#customer_id').val();
+		var contact_date = $('#contact_date').val();
+		var contact_name = $('#contact_name').val();
+		if(contact_date == ''){
+			layer.msg('请选择联系时间',{icon:2,time:1000});
 			return false;
 		}
-		if(password == ''){
-			layer.msg('密码不能为空',{icon:2,time:1000});
-			return false;
-		}
-		if(password2 == ''){
-			layer.msg('请确认密码',{icon:2,time:1000});
-			return false;
-		}
-		if(password2 != password){
-			layer.msg('两次输入的密码不一致',{icon:2,time:1000});
+		if(contact_name == ''){
+			layer.msg('请填写联系结果',{icon:2,time:1000});
 			return false;
 		}
 
 		$.ajax({
 			type: 'get',
 			dataType: "json",
-			data: {'username':username,'password':password},
-			url: "<{:url('admin/addAdmin')}>",
+			data: {'contact_name':contact_name,'contact_date':contact_date,'customer_id':customer_id},
+			url: "<{:url('Customer/editContact')}>",
 			success: function (rsp) {
 				if(rsp.err_code == '0'){
 					layer.msg('操作成功!',{icon:1,time:1000});
+					parent.window.dataOperationObj.get_data_list(parent.window.PAGE_INFO.PAGE);
 				}else{
 					layer.msg(rsp.err_msg,{icon:2,time:1000});
 				}

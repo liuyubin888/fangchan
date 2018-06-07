@@ -60,7 +60,12 @@
 				<table class="table table-border table-bordered table-bg">
 					<thead>
 						<tr>
-							<th scope="col" colspan="10">会员列表</th></tr>
+							<th scope="col" colspan="10">
+								<a href="javascript:;" class="btn btn-primary radius" id="contact_operation_btn">
+								<i class="Hui-iconfont"></i>联系结果备注</a></span>
+								<a href="javascript:;" class="btn btn-primary radius" id="prize_operation_btn">
+								<i class="Hui-iconfont"></i>发放奖品备注</a></span>
+							</th></tr>
 						<tr class="text-c">
 							<th width="25">
 								<input type="checkbox" name="ace" value="" id="ace"></th>
@@ -69,10 +74,10 @@
 							<th width="150">姓名</th>
 							<th width="150">个人分享唯一标识</th>
 							<th width="100">介绍人标识</th>
+							<th width="100">邀请人数</th>
 							<th width="100">是否联系</th>
 							<th width="100">奖品发放状态</th>
-							<th width="100">登记日期</th>
-							<th width="100">更改状态</th></tr>
+							<th width="100">登记日期</th></tr>
 					</thead>
 					<tbody id="data_list_box">			
 					</tbody>
@@ -114,6 +119,14 @@ $(function(){
 		layer.confirm('确认要删除吗？',function(){
 			dataOperationObj.delete_date_submit();
 		})
+	});
+	//联系结果操作
+	$('#contact_operation_btn').click(function(){
+		dataOperationObj.contact_operation_submit();
+	});
+	//奖品发放操作
+	$('#prize_operation_btn').click(function(){
+		dataOperationObj.prize_operation_submit();
 	});
 });
 
@@ -187,82 +200,74 @@ var dataOperationObj = {
 			var contact_status = item['contact_status']?item['contact_status']:'';
 			var receive_status = item['receive_status']?item['receive_status']:'';
 			var share_user_identification = item['share_user_identification']?item['share_user_identification']:'';
-			var contact_status_text = contact_status=='2'?'<span class="label label-success radius">已联系</span>':'<span class="label radius">未联系</span>';
-			var receive_status_text = receive_status=='2'?'<span class="label label-success radius">已发放</span>':'<span class="label radius">未发放</span>';
-			
-			if(contact_status == '1'){
-				var contact_btn = '<a href="javascript:;" class="btn btn-primary " onclick="dataOperationObj.contact(this);" data-id="'+ id +'">已联系</a>';
-			}else{
-				var contact_btn = '';
-			}
-			if(receive_status == '1'){
-				var receive_btn = '<a href="javascript:;" class="btn btn-primary " onclick="dataOperationObj.receive(this);" data-id="'+ id +'">已发放</a>'; 
-			}else{
-				var receive_btn = '';
-			}
+			var share_num = item['share_num']?item['share_num']:'';
+			var contact_status_text = contact_status=='2'?'<span class="label label-success radius">已联系</span>&nbsp;&nbsp;&nbsp;<span class="label label-primary radius" style="cursor: pointer;" data-id="'+ id +'" onclick="dataOperationObj.view_contact(this);">查看</span>':'<span class="label radius">未联系</span>';
+			var receive_status_text = receive_status=='2'?'<span class="label label-success radius">已发放</span>&nbsp;&nbsp;&nbsp;<span class="label label-primary radius" style="cursor: pointer;" data-id="'+ id +'" onclick="dataOperationObj.view_receive(this);">查看</span>':'<span class="label radius">未发放</span>';
 			html += '<tr class="text-c"><td><input class="checkids" type="checkbox" value="'+ id +'" name=""></td>';
 			html += '<td>'+ id +'</td>';
 			html += '<td>'+ mobile +'</td>';
 			html += '<td>'+ name +'</td>';
 			html += '<td>'+ share_identification +'</td>';
 			html += '<td>'+ share_user_identification +'</td>';
+			html += '<td>'+ share_num +'</td>';
 			html += '<td>'+ contact_status_text +'</td>';
 			html += '<td>'+ receive_status_text +'</td>';
-			html += '<td>'+ created +'</td>';
-			html += '<td>'+ contact_btn +'&nbsp;&nbsp;'+ receive_btn +'</td>';
+			html += '<td>'+ created +'</td></tr>';
 		}
 		$('#data_list_box').empty().append(html);
 	},
-	contact: function(obj){
-		var id = $(obj).attr('data-id');
-		if(id){
-			layer.confirm('是否确认操作？',function(index){
-				$.ajax({
-					type: 'get',
-					dataType: "json",
-					data: {customer_id:id},
-					url: "<{:url('Customer/editcontact')}>",
-					success: function (rsp) {
-						if(rsp.err_code == '0'){
-							layer.msg('操作成功!',{icon:1,time:1000});
-							dataOperationObj.get_data_list(PAGE_INFO.PAGE);
-						}
-						
-					},
-					error: function (XmlHttpRequest, textStatus, errorThrown) {
-						
-					}
-				});	
-			});
-		}else{
-			layer.msg('参数有误')
-		}
+	contact_operation_submit: function(){
+		var id = this.get_checked_val();
+		if(id[0] == undefined){
+        	layer.msg('请选择一行修改的数据'); return false;
+        }
+		if (id[1] > 0 && id[1] != '') {
+            layer.msg('请选择一行修改的数据'); return false;
+        }
+        id = id[0];
+		var url = "<{:url('Customer/showContact')}>"+'?id='+id;
+		layer_show('联系结果',url,'800','500');
 	},
-	receive: function(obj){
-		var id = $(obj).attr('data-id');
-		if(id){
-			layer.confirm('是否确认操作？',function(index){
-				$.ajax({
-					type: 'get',
-					dataType: "json",
-					data: {customer_id:id},
-					url: "<{:url('Customer/editreceive')}>",
-					success: function (rsp) {
-						if(rsp.err_code == '0'){
-							layer.msg('操作成功!',{icon:1,time:1000});
-							dataOperationObj.get_data_list(PAGE_INFO.PAGE);
-						}
-						
-					},
-					error: function (XmlHttpRequest, textStatus, errorThrown) {
-						
-					}
-				});
-			});
-		}else{
-			layer.msg('参数有误')
-		}
+	prize_operation_submit: function(){
+		var id = this.get_checked_val();
+		if(id[0] == undefined){
+        	layer.msg('请选择一行修改的数据'); return false;
+        }
+		if (id[1] > 0 && id[1] != '') {
+            layer.msg('请选择一行修改的数据'); return false;
+        }
+        id = id[0];
+		var url = "<{:url('Customer/showReceive')}>"+'?id='+id;
+		layer_show('奖品发放',url,'800','500');
 	},
+	view_contact: function(obj){ //联系结果
+		var id = $(obj).attr('data-id');
+		if(id == undefined || id == ''){
+        	layer.msg('参数有误'); return false;
+        }
+		var url = "<{:url('Customer/showContact')}>"+'?id='+id;
+		layer_show('联系结果',url,'800','500');
+	},
+	view_receive: function(obj){ //奖品发放
+		var id = $(obj).attr('data-id');
+		if(id == undefined || id == ''){
+        	layer.msg('参数有误'); return false;
+        }
+		var url = "<{:url('Customer/showReceive')}>"+'?id='+id;
+		layer_show('奖品发放',url,'800','500');
+	},
+	get_checked_val: function () { //获取选中的ID
+		var ids = [];
+		$('.checkids').each(function () {
+			var is_checked = $(this).is(':checked');
+			var id = $(this).val();
+
+			if (is_checked) {
+				ids.push(id);
+			}
+		});
+		return ids;
+	}
 }
 </script>
 </body>

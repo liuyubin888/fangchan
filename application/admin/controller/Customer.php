@@ -48,6 +48,14 @@ class customer extends Base
         }else{
             $list = array();
         }
+
+        if(!empty($list)){
+            foreach ($list as $key => &$value) {
+                $share_identification = $value['share_identification'];
+                $share_num = $customerObj->where(['share_user_identification'=>$share_identification])->count();
+                $value['share_num'] = $share_num?$share_num:'0';
+            }
+        }
         $pageInfo = array(
             'PageSize' => $PageSize,
             'TotalCount' => $TotalCount,
@@ -64,41 +72,64 @@ class customer extends Base
         return json($return);
     }
 
-    public function addcustomer(){
-       
-        $username = Request::instance()->param('username');
-        $password = Request::instance()->param('password');
-        if(empty($username) || empty($password)){
-            return json(array('err_code'=>10003,'err_msg'=>'参数错误'));
+
+    //联系结果页面
+    public function showContact()
+    {
+        $title = '联系结果备注';
+        $id = Request::instance()->param('id');
+        if(!$id || !is_numeric($id)){
+            $this->error('参数有误');
         }
-        $salt = random(6);
-        $status = Request::instance()->param('status');
-        $groupid = Request::instance()->param('groupid');
-        $password = md5($password . $salt);
-        $customerObj = new CustomerModel();
-        $userInfo = $customerObj->where(['username'=>$username])->find();
-        if(!empty($userInfo)){
-            return json(array('err_code'=>10003,'err_msg'=>'该用户名已存在'));
+        $CustomerObj = new CustomerModel();
+        $CustomerInfo = $CustomerObj->where(['id'=>$id])->find();
+        if(empty($CustomerInfo)){
+            $this->error('数据不存在');
         }
-        $data = [
-            'username'=>$username,
-            'password'=>$password,
-            'salt'=>$salt,
-            'created'=>date('Y-m-d H:i:s',time()),
-            'lastvisit'=>date('Y-m-d H:i:s',time()),
-            'status'=>1,
-            'groupid'=>1,
+        $contact_date = $CustomerInfo['contact_date']?$CustomerInfo['contact_date']:'';
+        $contact_name = $CustomerInfo['contact_name']?$CustomerInfo['contact_name']:'';
+        $assign = [
+            'title'=>$title,
+            'id'=>$id,
+            'maxDate'=>date('Y-m-d',time()),
+            'contact'=>['contact_date'=>$contact_date,'contact_name'=>$contact_name],
         ];
-        $ret = $customerObj->addUser($data);
-        if($ret){
-            return json(array('err_code'=>'0','err_msg'=>'操作成功'));
-        }
+        $this->assign($assign);
+        return $this->fetch('Customer/contact');
     }
 
-    public function editcontact(){ //更改联系人状态
+    //奖品发放页面
+    public function showReceive()
+    {
+        $title = '发放奖品';
+        $id = Request::instance()->param('id');
+        if(!$id || !is_numeric($id)){
+            $this->error('参数有误');
+        }
+        $CustomerObj = new CustomerModel();
+        $CustomerInfo = $CustomerObj->where(['id'=>$id])->find();
+        if(empty($CustomerInfo)){
+            $this->error('数据不存在');
+        }
+        $prize_grant_date = $CustomerInfo['prize_grant_date']?$CustomerInfo['prize_grant_date']:'';
+        $prize_name = $CustomerInfo['prize_name']?$CustomerInfo['prize_name']:'';
+        $assign = [
+            'title'=>$title,
+            'id'=>$id,
+            'maxDate'=>date('Y-m-d',time()),
+            'contact'=>['prize_grant_date'=>$prize_grant_date,'prize_name'=>$prize_name],
+        ];
+        $this->assign($assign);
+        return $this->fetch('Customer/receive');
+    }
+
+
+    public function editContact(){ //更改联系人状态
        
         $id = Request::instance()->param('customer_id');
-        if(empty($id) || !is_numeric($id)){
+        $contact_name = Request::instance()->param('contact_name');
+        $contact_date = Request::instance()->param('contact_date');
+        if(empty($id) || !is_numeric($id) || !$contact_name || !$contact_date){
             return json(array('err_code'=>-10001,'err_msg'=>'参数错误'));
         }
         $customerObj = new CustomerModel();
@@ -108,6 +139,8 @@ class customer extends Base
         }
         $data = [
             'contact_status'=>2,
+            'contact_name'=>$contact_name,
+            'contact_date'=>$contact_date,
         ];
         $ret = $customerObj->where(['id'=>$id])->update($data);
         if($ret){
@@ -117,10 +150,12 @@ class customer extends Base
         }
     }
 
-    public function editreceive(){ //更改发放奖品状态
+    public function editReceive(){ //更改发放奖品状态
        
         $id = Request::instance()->param('customer_id');
-        if(empty($id) || !is_numeric($id)){
+        $prize_name = Request::instance()->param('prize_name');
+        $prize_grant_date = Request::instance()->param('prize_grant_date');
+        if(empty($id) || !is_numeric($id) || !$prize_grant_date || !$prize_name){
             return json(array('err_code'=>-10001,'err_msg'=>'参数错误'));
         }
         $customerObj = new CustomerModel();
@@ -130,6 +165,8 @@ class customer extends Base
         }
         $data = [
             'receive_status'=>2,
+            'prize_grant_date'=>$prize_grant_date,
+            'prize_name'=>$prize_name,
         ];
         $ret = $customerObj->where(['id'=>$id])->update($data);
         if($ret){

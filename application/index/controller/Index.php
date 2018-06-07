@@ -13,6 +13,7 @@ class Index extends Controller
         $index_customer_id = Session::get('index_customer_id'); //客户ID
         $index_customer_mobile = Session::get('index_customer_mobile'); //客户手机号码 
         $index_share_identification = Session::get('index_share_identification'); //个人唯一分享标识
+        
         $sucde = Request::instance()->param('sucde'); //介绍人标识
         $sucde = $sucde?$sucde:'';
         $this->assign('sucde',$sucde);
