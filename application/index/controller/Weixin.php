@@ -7,13 +7,13 @@ use think\Log;
 use app\admin\model\CustomerModel;
 class Weixin extends Controller
 {
-
+	private $token = '';
     public function valid()
 
     {
 
         $echoStr = $_GET["echostr"];
-        $Token = 'UMFLfQP77qZN37XX7Fxmuk70pgxUx077';
+        $this->token = 'UMFLfQP77qZN37XX7Fxmuk70pgxUx077';
         Log::init([
 		    'type'  =>  'File',
 		    'path'  =>  APP_PATH.'logs/'
@@ -105,10 +105,7 @@ class Weixin extends Controller
 
         $nonce = $_GET["nonce"];
 
-
-        $token = TOKEN;
-
-        $tmpArr = array($token, $timestamp, $nonce);
+        $tmpArr = array($this->token, $timestamp, $nonce);
 
         sort($tmpArr);
 
