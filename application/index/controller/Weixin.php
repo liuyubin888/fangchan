@@ -13,7 +13,7 @@ class Weixin extends Controller
     {
 
         $echoStr = $_GET["echostr"];
-        $Token = 'cwAxUOu5MFtUclCzYGmxq9FbytI3Cmuu';
+        $Token = 'UMFLfQP77qZN37XX7Fxmuk70pgxUx077';
         Log::init([
 		    'type'  =>  'File',
 		    'path'  =>  APP_PATH.'logs/'
