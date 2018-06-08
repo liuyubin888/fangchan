@@ -14,6 +14,8 @@
     <link id="layuicss-skinlayercss" rel="stylesheet" href="__PUBLIC__/index/css/layer.css" media="all">
     <script src="__PUBLIC__/index/js/layer.js"></script>
     <script src="__PUBLIC__/index/js/zepto.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
     <title>周年庆典-房汇网</title>
     <script>
         (function (win,doc){
@@ -27,6 +29,40 @@
             win.addEventListener('resize',setFont,false);
             setFont();
         })(window,document);
+        var timestamp = "<{$JssdkConfig['timestamp']}>";
+        var nonceStr = "<{$JssdkConfig['nonceStr']}>";
+        var signature = "<{$JssdkConfig['signature']}>";
+        wx.config({
+            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: 'wx059d4aff52465d02', // 必填，公众号的唯一标识
+            timestamp: timestamp, // 必填，生成签名的时间戳
+            nonceStr: nonceStr, // 必填，生成签名的随机串
+            signature: signature,// 必填，签名
+            jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareQZone'] // 必填，需要使用的JS接口列表
+        });
+        wx.ready(function () {
+            var title = "<{$shareData['title']}>";
+            var desc = "<{$shareData['desc']}>";
+            var imgUrl = "<{$shareData['imgUrl']}>";
+            var link = "<{$shareData['link']}>";
+            var shareData = {
+                title : title,
+                desc : desc,
+                imgUrl:imgUrl,
+                link : link,
+                trigger: function (res) {},
+                complete: function (res) {},
+                success: function (res) {
+                },
+                cancel: function (res) {
+                },
+                fail: function (res) {
+                }
+            };
+            wx.onMenuShareAppMessage(shareData);
+            wx.onMenuShareQQ(shareData);
+            wx.onMenuShareTimeline(shareData);
+        });
     </script>
     <style>
         body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {

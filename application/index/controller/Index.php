@@ -3,6 +3,8 @@ namespace app\index\controller;
 use think\Controller;
 use think\Session;
 use think\Request;
+use Weixin\Swechat\SwechatObj;
+use Qcloud\Sms\SmsSingleSender;
 use app\admin\model\CustomerModel;
 class Index extends Controller
 {
@@ -10,13 +12,33 @@ class Index extends Controller
     public function index()
     {
         $index_logined = Session::get('index_logined'); //是否登录
-        $index_customer_id = Session::get('index_customer_id'); //客户ID
-        $index_customer_mobile = Session::get('index_customer_mobile'); //客户手机号码 
-        $index_share_identification = Session::get('index_share_identification'); //个人唯一分享标识
+        if($index_logined){
+            $index_customer_id = Session::get('index_customer_id'); //客户ID
+            $index_customer_mobile = Session::get('index_customer_mobile'); //客户手机号码 
+            $index_share_identification = Session::get('index_share_identification'); //个人唯一分享标识
+        }else{
+            $index_logined = '';
+            $index_customer_id = '';
+            $index_customer_mobile = '';
+            $index_share_identification = '';
+        }
         
+        $weixin = new SwechatObj();
+        $JssdkConfig = $weixin->getJssdkConfig();
         $sucde = Request::instance()->param('sucde'); //介绍人标识
         $sucde = $sucde?$sucde:'';
-        $this->assign('sucde',$sucde);
+        $shareData = array(
+            'title' => "推荐购房拿大奖，登记买房折扣多",
+            'desc' => "粤房汇网，周年庆典，购房折扣最高达7折",
+            'imgUrl' => "__PUBLIC__/index/images/sharelogo.jpg",
+            'link' => url('index/index',array('sucde'=>$index_share_identification)),
+        );
+        $assign = array(
+            'sucde'=>$sucde,
+            'JssdkConfig'=>$JssdkConfig,
+            'shareData'=>$shareData,
+        );
+        $this->assign($assign);
         return $this->fetch('index/index');
     }
 
