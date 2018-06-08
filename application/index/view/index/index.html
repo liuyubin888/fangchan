@@ -33,6 +33,27 @@
         var nonceStr = "<{$JssdkConfig['nonceStr']}>";
         var signature = "<{$JssdkConfig['signature']}>";
         var appId = "<{$JssdkConfig['appId']}>";
+
+        var title = "<{$shareData['title']}>";
+        var desc = "<{$shareData['desc']}>";
+        var imgUrl = "<{$shareData['imgUrl']}>";
+        var link = "<{$shareData['link']}>";
+        alert(link);
+        var shareData = {
+            title : title,
+            desc : desc,
+            imgUrl:imgUrl,
+            link : link,
+            trigger: function (res) {},
+            complete: function (res) {},
+            success: function (res) {
+            },
+            cancel: function (res) {
+            },
+            fail: function (res) {
+            }
+        };
+
         wx.config({
             debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
             appId: appId, // 必填，公众号的唯一标识
@@ -41,29 +62,10 @@
             signature: signature,// 必填，签名
             jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareQZone'] // 必填，需要使用的JS接口列表
         });
-        wx.ready(function () {
-            var title = "<{$shareData['title']}>";
-            var desc = "<{$shareData['desc']}>";
-            var imgUrl = "<{$shareData['imgUrl']}>";
-            var link = "<{$shareData['link']}>";
-            var shareData = {
-                title : title,
-                desc : desc,
-                imgUrl:imgUrl,
-                link : link,
-                trigger: function (res) {},
-                complete: function (res) {},
-                success: function (res) {
-                },
-                cancel: function (res) {
-                },
-                fail: function (res) {
-                }
-            };
-            wx.onMenuShareAppMessage(shareData);
-            wx.onMenuShareQQ(shareData);
-            wx.onMenuShareTimeline(shareData);
-        });
+        
+        wx.onMenuShareAppMessage(shareData);
+        wx.onMenuShareQQ(shareData);
+        wx.onMenuShareTimeline(shareData);
     </script>
     <style>
         body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
