@@ -7,7 +7,7 @@ use think\Log;
 use app\admin\model\CustomerModel;
 class Weixin extends Controller
 {
-	private $token = '';
+	public $token = '';
     public function valid()
 
     {
