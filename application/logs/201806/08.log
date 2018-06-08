@@ -1,0 +1,33 @@
+---------------------------------------------------------------
+[ 2018-06-08T15:59:44+08:00 ] 127.0.0.1 GET /index.php/index/weixin/valid/?echostr=21
+[ info ] www.yuefanghui.cc/index.php/index/weixin/valid/?echostr=21 [运行时间：0.263026s][吞吐率：3.80req/s] [内存消耗：1,269.04kb] [文件加载：49]
+[ info ] [ LANG ] D:\WWW\fangchan\thinkphp\lang\zh-cn.php
+[ info ] [ ROUTE ] array (
+  'type' => 'module',
+  'module' => 
+  array (
+    0 => 'index',
+    1 => 'weixin',
+    2 => 'valid',
+  ),
+)
+[ info ] [ HEADER ] array (
+  'cookie' => 'pgv_pvi=614873088; PHPSESSID=v0lgfbv4tcofgm9dalv7qooj00',
+  'accept-language' => 'zh-CN,zh;q=0.9',
+  'accept-encoding' => 'gzip, deflate',
+  'accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+  'user-agent' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36',
+  'upgrade-insecure-requests' => '1',
+  'cache-control' => 'max-age=0',
+  'connection' => 'close',
+  'host' => 'www.yuefanghui.cc',
+)
+[ info ] [ PARAM ] array (
+  'echostr' => '21',
+)
+[ info ] [ RUN ] app\index\controller\Weixin->valid[ D:\WWW\fangchan\application\index\controller\Weixin.php ]
+[ info ] [ LOG ] INIT File
+[ log ] array (
+  0 => 'testlog',
+)
+[ error ] [8]未定义数组索引: signature[D:\WWW\fangchan\application\index\controller\Weixin.php:104]
