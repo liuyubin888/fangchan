@@ -36,8 +36,8 @@
 
         var title = "<{$shareData['title']}>";
         var desc = "<{$shareData['desc']}>";
-        var imgUrl = "<{$shareData['imgUrl']}>";
-        var link = "<{$shareData['link']}>";
+        var imgUrl = "http://yfh.miits.cn/"+"<{$shareData['imgUrl']}>";
+        var link = "http://yfh.miits.cn/"+"<{$shareData['link']}>";
         alert(link);
         var shareData = {
             title : title,
@@ -62,7 +62,7 @@
             signature: signature,// 必填，签名
             jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareQZone'] // 必填，需要使用的JS接口列表
         });
-        
+
         wx.onMenuShareAppMessage(shareData);
         wx.onMenuShareQQ(shareData);
         wx.onMenuShareTimeline(shareData);
