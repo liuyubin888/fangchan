@@ -20,19 +20,18 @@ class Index extends Controller
             $index_logined = '';
             $index_customer_id = '';
             $index_customer_mobile = '';
-            $index_share_identification = '';
+            $index_share_identification = '21212121';
         }
         
         $weixin = new SwechatObj();
         $JssdkConfig = $weixin->getJssdkConfig();
         $sucde = Request::instance()->param('sucde'); //邀请人标识
         $sucde = $sucde?$sucde:'';
-        // var_dump($sucde);die;
         $shareData = array(
             'title' => "推荐购房拿大奖，登记买房折扣多",
             'desc' => "粤房汇网，周年庆典，购房折扣最高达7折",
-            'imgUrl' => __PUBLIC__."/index/images/sharelogo.jpg",
-            'link' => url('index/index',array('sucde'=>$index_share_identification)),
+            'imgUrl' => "/static/index/images/sharelogo.jpg",
+            'link' => url('index/index/index',array('sucde'=>$index_share_identification)),
         );
         $assign = array(
             'sucde'=>$sucde,
