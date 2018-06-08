@@ -32,3 +32,38 @@ function random($length, $numeric = 0) {
 	}
 	return $hash;
 }
+
+function scriptname() {
+	$script_name = basename($_SERVER['SCRIPT_FILENAME']);
+	if(basename($_SERVER['SCRIPT_NAME']) === $script_name) {
+		$script_name = $_SERVER['SCRIPT_NAME'];
+	} else {
+		if(basename($_SERVER['PHP_SELF']) === $script_name) {
+			$script_name = $_SERVER['PHP_SELF'];
+		} else {
+			if(isset($_SERVER['ORIG_SCRIPT_NAME']) && basename($_SERVER['ORIG_SCRIPT_NAME']) === $script_name) {
+				$script_name = $_SERVER['ORIG_SCRIPT_NAME'];
+			} else {
+				if(($pos = strpos($_SERVER['PHP_SELF'], '/' . $scriptName)) !== false) {
+					$script_name = substr($_SERVER['SCRIPT_NAME'], 0, $pos) . '/' . $script_name;
+				} else {
+					if(isset($_SERVER['DOCUMENT_ROOT']) && strpos($_SERVER['SCRIPT_FILENAME'], $_SERVER['DOCUMENT_ROOT']) === 0) {
+						$script_name = str_replace('\\', '/', str_replace($_SERVER['DOCUMENT_ROOT'], '', $_SERVER['SCRIPT_FILENAME']));
+					} else {
+						$script_name = 'unknown';
+					}
+				}
+			}
+		}
+	}
+	return $script_name;
+}
+
+function createSiteUrl(){
+	$sitepath = substr($_SERVER['PHP_SELF'], 0, strrpos($_SERVER['PHP_SELF'], '/'));
+    $siteroot = htmlspecialchars('http://' . $_SERVER['HTTP_HOST'] . $sitepath);
+    $urls = parse_url($siteroot);
+    $scriptname = htmlspecialchars(scriptname());
+    $query_string = empty($_SERVER['QUERY_STRING']) ? '' : '?' . $_SERVER['QUERY_STRING'];
+    return $siteurl = $urls['scheme'].'://'.$urls['host'].$scriptname.$query_string;
+}

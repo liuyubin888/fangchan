@@ -86,7 +86,8 @@ class SwechatObj {
         $jsapiTicket = $jsapiTicket['data'];
         $nonceStr = random(16);
         $timestamp = $this->timestamp;
-        $url = 'http://yfh.miits.cn/index.php/';
+        
+        $url = createSiteUrl();
         $string1 = "jsapi_ticket={$jsapiTicket}&noncestr={$nonceStr}&timestamp={$timestamp}&url={$url}";
         $signature = sha1($string1);
         $config = array(
