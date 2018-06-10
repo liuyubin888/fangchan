@@ -26,7 +26,8 @@ class Index extends Controller
             $index_customer_num = '';
         }
         $weixin = new SwechatObj();
-        $JssdkConfig = $weixin->getJssdkConfig();
+        $link = 'http://'.$_SERVER['HTTP_HOST'].url('index/index/index',array('sucde'=>$index_share_identification));
+        $JssdkConfig = $weixin->getJssdkConfig($link);
         $sucde = Request::instance()->param('sucde'); //邀请人标识
         $sucde = $sucde?$sucde:'';
         $loginInfo = array(
@@ -36,15 +37,12 @@ class Index extends Controller
             'sucde'=>$sucde,
             'index_customer_num'=>$index_customer_num,
         );
-
-        $link = 'http://'.$_SERVER['HTTP_HOST'].url('index/index/index',array('sucde'=>$index_share_identification));
-        $url = createSiteUrl();
+        // $url = createSiteUrl();
         $shareData = array(
             'title' => "推荐购房拿大奖，登记买房折扣多",
             'desc' => "粤房汇网，周年庆典，购房折扣最高达7折",
             'imgUrl' => 'http://'.$_SERVER['HTTP_HOST']."/static/index/images/sharelogo.jpg",
             'link' => $link,
-            'url' => $url,
         );
         $assign = array(
             'loginInfo'=>$loginInfo,
