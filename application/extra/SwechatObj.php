@@ -2,7 +2,6 @@
 namespace Weixin\Swechat;
 use HttpGet\Extract\Curl\Curl;
 use Extracts\CacheMysql\CacheMysql;
-use think\Session;
 class SwechatObj {
     public $AppSecret = '83ad245aab4a191364c14538f8b07e52';
     public $AppID = 'wx059d4aff52465d02'; //正确APPID
@@ -88,9 +87,9 @@ class SwechatObj {
         $nonceStr = random(16);
         $timestamp = $this->timestamp;
         
-        $index_share_identification = Session::get('index_share_identification')?Session::get('index_share_identification'):'';
-        $link = 'http://'.$_SERVER['HTTP_HOST'].url('index/index/index',array('sucde'=>$index_share_identification));
-        $string1 = "jsapi_ticket={$jsapiTicket}&noncestr={$nonceStr}&timestamp={$timestamp}&url={$link}";
+        $url = createSiteUrl();
+        $index_share_identification = Session::get('index_share_identification');
+        $string1 = "jsapi_ticket={$jsapiTicket}&noncestr={$nonceStr}&timestamp={$timestamp}&url={$url}";
         $signature = sha1($string1);
         $config = array(
             "appId"     => $this->AppID,
