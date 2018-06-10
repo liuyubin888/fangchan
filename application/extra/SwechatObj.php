@@ -78,7 +78,7 @@ class SwechatObj {
         return $this->result;
     }
 
-    public function getJssdkConfig($link){
+    public function getJssdkConfig(){
         $jsapiTicket = $this->getJsApiTicket();
         if($jsapiTicket['err_code'] != '0'){
             return $jsapiTicket;
@@ -86,8 +86,9 @@ class SwechatObj {
         $jsapiTicket = $jsapiTicket['data'];
         $nonceStr = random(16);
         $timestamp = $this->timestamp;
-
-        $string1 = "jsapi_ticket={$jsapiTicket}&noncestr={$nonceStr}&timestamp={$timestamp}&url={$link}";
+        
+        $url = createSiteUrl();
+        $string1 = "jsapi_ticket={$jsapiTicket}&noncestr={$nonceStr}&timestamp={$timestamp}&url={$url}";
         $signature = sha1($string1);
         $config = array(
             "appId"     => $this->AppID,
