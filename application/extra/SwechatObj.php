@@ -88,7 +88,6 @@ class SwechatObj {
         $timestamp = $this->timestamp;
         
         $url = createSiteUrl();
-        $index_share_identification = Session::get('index_share_identification');
         $string1 = "jsapi_ticket={$jsapiTicket}&noncestr={$nonceStr}&timestamp={$timestamp}&url={$url}";
         $signature = sha1($string1);
         $config = array(
