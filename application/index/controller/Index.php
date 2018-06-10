@@ -11,7 +11,6 @@ class Index extends Controller
     //展示首页
     public function index()
     {
-        
         $index_logined = Session::get('index_logined'); //是否登录
         if($index_logined){
             $index_customer_id = Session::get('index_customer_id'); //客户ID
@@ -38,13 +37,11 @@ class Index extends Controller
         );
 
         $link = 'http://'.$_SERVER['HTTP_HOST'].url('index/index/index',array('sucde'=>$index_share_identification));
-        $url = createSiteUrl();
         $shareData = array(
             'title' => "推荐购房拿大奖，登记买房折扣多",
             'desc' => "粤房汇网，周年庆典，购房折扣最高达7折",
             'imgUrl' => 'http://'.$_SERVER['HTTP_HOST']."/static/index/images/sharelogo.jpg",
             'link' => $link,
-            'url' => $url,
         );
         $assign = array(
             'loginInfo'=>$loginInfo,
