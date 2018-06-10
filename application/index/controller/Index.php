@@ -83,11 +83,11 @@ class Index extends Controller
         $index_mobile_is_existence = Session::get('index_mobile_is_existence'); //服务端保存验证码数据，包含过期时间
         if($code_expire<time()){ //验证码过期了
             Session::delete('msg_code');
-            // return json(array('err_code'=>'-10004','err_msg'=>'请重新获取验证码'));
+            return json(array('err_code'=>'-10004','err_msg'=>'请重新获取验证码'));
         }
 
         if(empty($code) || strlen($code) != 6 || !is_numeric($code) || $code != $save_code){
-            // return json(array('err_code'=>'-10004','err_msg'=>'验证码有误'));
+            return json(array('err_code'=>'-10004','err_msg'=>'验证码有误'));
         }
         
         $res = preg_match('/0?(13|14|15|18|17)[0-9]{9}$/', $mobile);
@@ -97,7 +97,7 @@ class Index extends Controller
         }
 
         if($mobile != $save_mobile){
-            // return json(array('err_code'=>'-10001','err_msg'=>'修改手机号码需重新获取验证码'));
+            return json(array('err_code'=>'-10001','err_msg'=>'修改手机号码需重新获取验证码'));
         }
 
         if($index_mobile_is_existence['mobile'] != $mobile && $index_mobile_is_existence['is_existence'] == false){

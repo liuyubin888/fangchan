@@ -18,7 +18,7 @@ class Sendmsg extends Controller
         if(!$res || empty($mobile)){
             return json(array('err_code'=>'-10001','err_msg'=>'手机号码格式错误'));
         }
-        return json(array('err_code'=>'0','err_msg'=>'success'));
+        
         $code = rand(100000, 999999);
         $expire = time()+60;
         //操作验证码发送
