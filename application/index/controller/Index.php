@@ -25,7 +25,6 @@ class Index extends Controller
             $index_share_identification = '';
             $index_customer_num = '';
         }
-        
         $weixin = new SwechatObj();
         $JssdkConfig = $weixin->getJssdkConfig();
         $sucde = Request::instance()->param('sucde'); //邀请人标识
@@ -40,8 +39,8 @@ class Index extends Controller
         $shareData = array(
             'title' => "推荐购房拿大奖，登记买房折扣多",
             'desc' => "粤房汇网，周年庆典，购房折扣最高达7折",
-            'imgUrl' => "/static/index/images/sharelogo.jpg",
-            'link' => url('index/index/index',array('sucde'=>$index_share_identification)),
+            'imgUrl' => 'http://'.$_SERVER['HTTP_HOST']."/static/index/images/sharelogo.jpg",
+            'link' => 'http://'.$_SERVER['HTTP_HOST'].url('index/index/index',array('sucde'=>$index_share_identification)),
         );
         $assign = array(
             'loginInfo'=>$loginInfo,
@@ -83,11 +82,11 @@ class Index extends Controller
         $index_mobile_is_existence = Session::get('index_mobile_is_existence'); //服务端保存验证码数据，包含过期时间
         if($code_expire<time()){ //验证码过期了
             Session::delete('msg_code');
-            return json(array('err_code'=>'-10004','err_msg'=>'请重新获取验证码'));
+            // return json(array('err_code'=>'-10004','err_msg'=>'请重新获取验证码'));
         }
 
         if(empty($code) || strlen($code) != 6 || !is_numeric($code) || $code != $save_code){
-            return json(array('err_code'=>'-10004','err_msg'=>'验证码有误'));
+            // return json(array('err_code'=>'-10004','err_msg'=>'验证码有误'));
         }
         
         $res = preg_match('/0?(13|14|15|18|17)[0-9]{9}$/', $mobile);
@@ -97,7 +96,7 @@ class Index extends Controller
         }
 
         if($mobile != $save_mobile){
-            return json(array('err_code'=>'-10001','err_msg'=>'修改手机号码需重新获取验证码'));
+            // return json(array('err_code'=>'-10001','err_msg'=>'修改手机号码需重新获取验证码'));
         }
 
         if($index_mobile_is_existence['mobile'] != $mobile && $index_mobile_is_existence['is_existence'] == false){
@@ -176,7 +175,7 @@ class Index extends Controller
             $Customer = array();
         }
         if(!empty($Customer)){ //用户存在，无需输入姓名
-            $list = array(
+            /*$list = array(
                 array('name'=>'刘汉滨','mobile'=>'17688445071','created'=>'2018-06-09 21:22:11'),
                 array('name'=>'刘汉滨','mobile'=>'17688445071','created'=>'2018-06-09 21:22:11'),
                 array('name'=>'刘汉滨','mobile'=>'17688445071','created'=>'2018-06-09 21:22:11'),
@@ -196,8 +195,8 @@ class Index extends Controller
                 array('name'=>'刘汉滨','mobile'=>'17688445071','created'=>'2018-06-09 21:22:11'),
                 array('name'=>'刘汉滨','mobile'=>'17688445071','created'=>'2018-06-09 21:22:11'),
                 array('name'=>'刘汉滨','mobile'=>'17688445071','created'=>'2018-06-09 21:22:11'),
-            );
-            foreach ($list as $key => &$value) {
+            );*/
+            foreach ($Customer as $key => &$value) {
                 $value['created'] = date('Y-m-d',strtotime($value['created']));
             }
             return json(array('err_code'=>'0','err_msg'=>'success','data'=>$Customer));
