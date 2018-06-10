@@ -29,16 +29,10 @@
             win.addEventListener('resize',setFont,false);
             setFont();
         })(window,document);
-        var sucde = "<{$loginInfo['sucde']}>";
-        var index_customer_id = "<{$loginInfo['index_customer_id']}>";
-        var index_customer_mobile = "<{$loginInfo['index_customer_mobile']}>";
-        var index_share_identification = "<{$loginInfo['index_share_identification']}>";
-        var index_customer_num = "<{$loginInfo['index_customer_num']}>";
         var timestamp = "<{$JssdkConfig['timestamp']}>";
         var nonceStr = "<{$JssdkConfig['nonceStr']}>";
         var signature = "<{$JssdkConfig['signature']}>";
         var appId = "<{$JssdkConfig['appId']}>";
-        var index_mobile_is_existence = false;
 
         wx.config({
             debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -54,6 +48,7 @@
             var desc = "<{$shareData['desc']}>";
             var imgUrl = "http://yfh.miits.cn<{$shareData['imgUrl']}>";
             var link = "http://yfh.miits.cn<{$shareData['link']}>";
+            alert(link);
             var shareData = {
                 title : title,
                 desc : desc,
@@ -239,69 +234,9 @@
             text-align: center;
             background-color: rgb(92, 45, 142);
         }
-        .content-2 .vue-edit-area-5{
-            position: absolute;
-            bottom: .7rem;
-            left: .6rem;
-            line-height: .8rem;
-            color: rgb(255, 255, 255);
-            width: 2rem;
-            height: .8rem;
-            font-size: .3rem;
-            font-weight: bold;
-            text-align: center;
-            background-color: rgb(92, 45, 142);
-            display: none;
-        }
-        .content-2 .vue-edit-area-6{
-            position: absolute;
-            bottom: .7rem;
-            right: .6rem;
-            line-height: .8rem;
-            color: rgb(255, 255, 255);
-            width: 2rem;
-            height: .8rem;
-            font-size: .3rem;
-            font-weight: bold;
-            text-align: center;
-            background-color: rgb(92, 45, 142);
-            display: none;
-        }
-        .content-2 .vue-edit-area-7{
-            position: absolute;
-            bottom: 1.5rem;
-            left: .3rem;
-            line-height: .8rem;
-            color: rgb(255, 255, 255);
-            width: 5.9rem;
-            height: .8rem;
-            font-size:.26rem;
-            display: none;
-        }
-        
-        #show_share_identification_box{
-            height: 4rem;
-            max-height: 4rem;
-            overflow: hidden;
-            overflow-y: auto;
-        }
-
-        #show_share_identification_box ul{
-            float:left;
-        }
-        #show_share_identification_box ul li{
-            width: 1.8rem;
-            float: left;
-            height: .9rem;
-            text-align: center;
-            line-height: .9rem;
-        }
     </style>
     </head>
     <body>
-        <div class="w_pop">
-            
-        </div>
         <div class="wrap">
             <div class="content-1">
                 <img src="__PUBLIC__/index/images/5a6853a4789b3.jpg" width="100%" height="100%">
@@ -339,54 +274,11 @@
                     </p>
                 </div>
                 <div class="vue-edit-area-4" id="active_btn">点击参与活动</div>
-                <div class="vue-edit-area-5" id="active_share">分享活动</div>
-                <div class="vue-edit-area-6" id="invitation_detailed">邀请详细</div>
-                <div class="vue-edit-area-7" id="customer_data">
-                    您的号码：<span id="show_customer_data_mobile">18126788811</span> &nbsp;&nbsp;&nbsp;
-                    邀请人数：<span id="show_customer_data_num">3</span>
-                    &nbsp;&nbsp;<a href="<{:url('index/index/logOut')}>" style="color: #5d5f60;font-size: .2rem;">退出登录</a>
-                </div>
             </div>
         </div>
     </body>
     <script>
-        $(function(){
-
-            if(index_customer_id){ //登录初始化
-                $('#show_customer_data_mobile').html(index_customer_mobile);
-                $('#show_customer_data_num').html(index_customer_num);
-                $('#active_btn').hide();
-                $('#active_share,#invitation_detailed,#customer_data').show();
-            }else{
-                $('#show_customer_data_mobile').html('');
-                $('#show_customer_data_num').html('');
-                $('#active_btn').show();
-                $('#active_share,#invitation_detailed,#customer_data').hide();
-            }
-
-            $('#active_btn').click(function(){
-                approvalObj.registerMobile();
-            });
-            var img_url = "__PUBLIC__/index/images/576b41d0c30c5_1024.jpg";
-            $('#active_share').click(function(){
-                layer.open({
-                    content: '<img src="'+ img_url +'" alt="" width="100%;" height="100%;"/>',
-                    style: 'position:fixed;top:.2rem;left:0;width:100%;',
-                    btn: '我知道了',
-                  });
-            });
-            $('#invitation_detailed').click(function(){
-                if(index_customer_num == 0){
-                    layer.open({
-                        content: '暂无数据'
-                        ,skin: 'footer',
-                        style: 'text-align:center;',
-                      });
-                }else{
-                    approvalObj.getInvitationDetailed();
-                }
-            });
-        });
+        
         var approvalObj = {
             is_send_code:true, //是否可以发送验证码
             is_submit_data:false, //是否可以提交资料flag
@@ -422,56 +314,10 @@
                     }
                 });
             },
-            getInvitationDetailed : function (){ //获取邀请详情
-                var url = "<{:url('Index/index/getInvitationDetailed')}>";
-                $.ajax({
-                    type:'post',
-                    url:url,
-                    dataType:'json',
-                    data:{'share_identification':index_share_identification},
-                    success:function(rsp){
-                        if(rsp.err_code == '0'){
-                            var data = rsp.data;
-                            var html = '<div id="show_share_identification_box">';
-                                html += '<ul>';
-                                html += '<li>姓名</li>';
-                                html += '<li>电话</li>';
-                                html += '<li style="text-align:center;">登记时间</li>';
-                                html += '</ul>';
-                            for(var i in data){
-                                var created = data[i]['created'];
-                                var name = data[i]['name'];
-                                var mobile = data[i]['mobile'];
-                                html += '<ul>';
-                                html += '<li>'+ name  +'</li>';
-                                html += '<li>'+ mobile +'</li>';
-                                html += '<li>'+ created +'</li>';
-                                html += '</ul>';
-                            }
-                            html += '</div>'
-                            layer.open({
-                                content: html,
-                                btn: '我知道了',
-                              });
-                        }else{
-                            layer.open({
-                                content: rsp.err_msg
-                                ,skin: 'footer',
-                                style: 'text-align:center;',
-                              });
-                        }
-                        
-                    },
-                    error:function(){
-
-                    }
-                });
-            },
             sublime_data:function(){  //确定提交资料
                 var _this = this;
                 if(!_this.is_submit_data){return}
                 var mobile = $('#mobile').val()?$('#mobile').val():'';
-                var customer_name = $('#customer_name').val()?$('#customer_name').val():'';
                 var code = $('#code').val()?$('#code').val():'';
                 var url = "<{:url('index/Index/gradeMobile')}>";
                 var preg = /^1[34578]\d{9}$/;
@@ -484,21 +330,14 @@
                     $('#tips-text').html('验证码格式错误').css('opacity','1');
                     return false;
                 }
-                if(index_mobile_is_existence){
-                    if(!customer_name){
-                        $('#tips-text').html('请输入姓名').css('opacity','1');
-                        return false;
-                    }    
-                }
-                
                 $.ajax({
                     type:'post',
                     url:url,
                     dataType:'json',
-                    data:{'mobile':mobile,'code':code,'name':customer_name},
+                    data:{'mobile':mobile,'code':code,'name':'test'},
                     success:function(rsp){
                         if(rsp.err_code == '0'){
-                            location.reload();
+
                         }else{
                             $('#tips-text').html(rsp.err_msg).css('opacity','1');
                         }
@@ -524,7 +363,14 @@
                     }
                 },1000);
             },
-            registerMobile:function(){
+        };
+
+        $(function(){
+            
+            $('#approval_mobile_btn').click(function(){
+                
+            });
+            $('#active_btn').click(function(){
                 var html = '<div style="position: relative;">\
                                 <a href="javascript:;" onclick="layer.closeAll();" style="position: absolute;top: .4rem;right: .5rem;font-size:.5rem;color:#ccc;width: .2rem;height: .2rem;line-height: .2rem;">\
                                     X\
@@ -540,8 +386,7 @@
                                 <div style="margin-top: .16rem;">\
                                     <div style=" border-bottom:1px #e8e8e8 solid;">\
                                         <input type="text" placeholder="请输入您的常用手机号" style="color:#636363;border:none;border-bottom:1px #e8e8e8 solid;width: 4.5rem;margin-left: .47rem;line-height: .85rem;outline:none;"\
-                                        id="mobile" onchange="checkMobile()">\
-                                        <input type="text" placeholder="请输入您的姓名" style="display:none;color:#636363;border:none;border-bottom:1px #e8e8e8 solid;width: 4.5rem;margin-left: .47rem;line-height: .85rem;outline:none;" id="customer_name">\
+                                        id="mobile">\
                                         <input type="text" placeholder="请输入验证码" style="color:#636363;border:none;width: 3rem;margin-left: .47rem;line-height: .85rem;outline:none;float:left;"\
                                         id="code">\
                                         <div style="width:.3rem;float:left;line-height: .85rem;color:#337fb7;">\
@@ -572,35 +417,8 @@
                     });
                   }
                 });
-            }
-        };
-
-        function checkMobile(){
-                var mobile = $('#mobile').val()?$('#mobile').val():'';
-                var preg = /^1[34578]\d{9}$/;
-                var url = "<{:url('index/Index/getCustomerInfo')}>";
-                if(preg.test(mobile)){
-                     $.ajax({
-                        type:'post',
-                        url:url,
-                        dataType:'json',
-                        data:{'mobile':mobile},
-                        success:function(rsp){
-                            if(rsp.err_code == '0' && rsp.data == '2'){
-                                $('#customer_name').show();
-                                index_mobile_is_existence = true;
-                            }else if(rsp.err_code == '0' && rsp.data == '1'){
-                                $('#customer_name').hide();
-                                index_mobile_is_existence = false;
-                            }
-                            
-                        },
-                        error:function(){
-
-                        }
-                    });
-                }
-            }
+            })
+        });
 
     </script>
 </html>

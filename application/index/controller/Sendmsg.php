@@ -22,11 +22,12 @@ class Sendmsg extends Controller
         $expire = time()+60;
         //操作验证码发送
         $res = $this->sendmsg($code,$mobile);
+        
         if($res['result'] == '0'){
             $codeSessionData = array(
                 'data'=>$code,
                 'expire'=>$expire,
-                'mobile'=>$mobile, ////防止前端获取了验证码之后，又填写另一个手机号码
+                'mobile'=>$mobile, //防止前端获取了验证码之后，又填写另一个手机号码
             );
             Session::set('msg_code',$codeSessionData);
             return json(array('err_code'=>'0','err_msg'=>'success'));
