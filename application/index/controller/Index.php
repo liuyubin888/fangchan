@@ -11,8 +11,10 @@ class Index extends Controller
     //展示首页
     public function index()
     {
+        
         $index_logined = Session::get('index_logined'); //是否登录
         if($index_logined){
+            $this->checkCustomerExistence(); //用户资料不存在，清除session
             $index_customer_id = Session::get('index_customer_id'); //客户ID
             $index_customer_mobile = Session::get('index_customer_mobile'); //客户手机号码 
             $index_share_identification = Session::get('index_share_identification'); //个人唯一分享标识
@@ -50,6 +52,21 @@ class Index extends Controller
         );
         $this->assign($assign);
         return $this->fetch('index/index');
+    }
+
+    //检查用户SESSION是否存在数据库
+    public function checkCustomerExistence(){
+        $index_customer_id = Session::get('index_customer_id');
+        if($index_customer_id){
+            $customerObj = new CustomerModel();
+            $customerInfo = $customerObj->where('id',$index_customer_id)->find();
+            if(empty($customerInfo)){
+                Session::delete('index_logined');
+                Session::delete('index_customer_id');
+                Session::delete('index_customer_mobile');
+                Session::delete('index_share_identification');
+            }
+        }
     }
 
     //点击参与活动验证登录态
