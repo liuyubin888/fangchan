@@ -41,13 +41,13 @@ class Sendmsg extends Controller
     //发送短信
     private function sendmsg($code,$phoneNumber){
         // 短信应用SDK AppID
-        $appid = 1400093860; // 1400开头
+        $appid = 1400099255; // 1400开头
 
         // 短信应用SDK AppKey
-        $appkey = "1d490819a170e8c55db631349095c6a7";
+        $appkey = "088f60ec4aa70fe9d6be4e8ab83579f9";
 
         // 短信模板ID，需要在短信应用中申请
-        $templateId = 132546;  // NOTE: 这里的模板ID`7839`只是一个示例，真实的模板ID需要在短信控制台中申请
+        $templateId = 131654;  // NOTE: 这里的模板ID`7839`只是一个示例，真实的模板ID需要在短信控制台中申请
 
         //如需发送海外短信，同样可以使用此接口，只需将国家码"86"改写成对应国家码号。
         $ssender = new SmsSingleSender($appid, $appkey);
